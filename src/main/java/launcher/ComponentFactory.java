@@ -20,7 +20,7 @@ public class ComponentFactory {
     private final BookController bookController;
     private final BookRepository bookRepository;
     private final BookService bookService;
-    private static ComponentFactory instance;
+    private static volatile ComponentFactory instance;
 
     public static ComponentFactory getInstance(Boolean componentsForTest, Stage primaryStage ){
         if(instance == null){

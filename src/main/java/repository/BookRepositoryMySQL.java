@@ -52,12 +52,9 @@ public class BookRepositoryMySQL implements BookRepository{
     @Override
     public boolean save(Book book) {
 
-        //String sql = "INSERT INTO book VALUES(null, \'" + book.getAuthor() +"\', \'" + book.getTitle()+"\', \'" + book.getPublishedDate() + "\' );";
         String newSql = "INSERT INTO book VALUES(null, ?, ?, ?);";
 
         try{
-//            Statement statement = connection.createStatement();
-//            statement.executeUpdate(sql);
             PreparedStatement preparedStatement = connection.prepareStatement(newSql);
             preparedStatement.setString(1, book.getAuthor());
             preparedStatement.setString(2, book.getTitle());
