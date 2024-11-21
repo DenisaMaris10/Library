@@ -4,6 +4,8 @@ import model.User;
 import model.builder.UserBuilder;
 //import model.validator.Notification;
 //import model.validator.UserValidator;
+import model.validator.Notification;
+import model.validator.UserValidator;
 import repository.security.RightsRolesRepository;
 import repository.user.UserRepository;
 
@@ -24,8 +26,8 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     }
 
     @Override
-    public boolean register(String username, String password) {
-        String encodedPassword = hashPassword(password);
+    public Notification<Boolean> register(String username, String password) {
+
         //Prin criptare, de la un mesaj criptat ne putem intoarce la mesajul decriptat: mesaj -> fdnaklfnfjksgsgss -> mesaj
         // o parola simpla se va transforma intr-un hash
         // Dintr-un hash nu ma pot intoarce la mesajul initial
@@ -34,28 +36,29 @@ public class AuthenticationServiceImpl implements AuthenticationService {
 
         User user = new UserBuilder()
                 .setUsername(username)
-                .setPassword(encodedPassword)
-                .setRoles(Collections.singletonList(customerRole))
+                .setPassword(password)
+                .setRoles(Collections.singletonList(customerRole)) //lista imutabila si care are o singura copie
                 .build();
 
-        //UserValidator userValidator = new UserValidator(user);
+        String encodedPassword = hashPassword(password);
+        UserValidator userValidator = new UserValidator(user);
 
-//        boolean userValid = userValidator.validate();
-//        Notification<Boolean> userRegisterNotification = new Notification<>();
-//
-//        if (!userValid){
-//            userValidator.getErrors().forEach(userRegisterNotification::addError);
-//            userRegisterNotification.setResult(Boolean.FALSE);
-//        } else {
-//            user.setPassword(hashPassword(password));
-//            userRegisterNotification.setResult(userRepository.save(user));
-//        }
+        boolean userValid = userValidator.validate();
+        Notification<Boolean> userRegisterNotification = new Notification<>();
 
-        return userRepository.save(user);
+        if (!userValid){
+            userValidator.getErrors().forEach(userRegisterNotification::addError);
+            userRegisterNotification.setResult(Boolean.FALSE);
+        } else {
+            user.setPassword(hashPassword(password));
+            userRegisterNotification.setResult(userRepository.save(user));
+        }
+
+        return userRegisterNotification;
     }
 
     @Override
-    public User login(String username, String password) {
+    public Notification<User> login(String username, String password) {
         return userRepository.findByUsernameAndPassword(username, hashPassword(password));
     }
 
