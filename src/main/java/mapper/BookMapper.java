@@ -1,7 +1,7 @@
 package mapper;
 
 import model.Book;
-import model.BookBuilder;
+import model.builder.BookBuilder;
 import view.model.BookDTO;
 import view.model.builder.BookDTOBuilder;
 

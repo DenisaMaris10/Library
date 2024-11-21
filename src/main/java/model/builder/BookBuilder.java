@@ -1,4 +1,6 @@
-package model;
+package model.builder;
+
+import model.Book;
 
 import java.time.LocalDate;
 
