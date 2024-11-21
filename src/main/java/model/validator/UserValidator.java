@@ -1,6 +1,7 @@
 package model.validator;
 
 
+import model.User;
 import repository.user.UserRepository;
 
 import java.util.ArrayList;
@@ -12,29 +13,18 @@ public class UserValidator {
     private static final String EMAIL_VALIDATION_REGEX = "^[a-zA-Z0-9_!#$%&'*+/=?`{|}~^.-]+@[a-zA-Z0-9.-]+$";
     public static final int MIN_PASSWORD_LENGTH = 8;
     private final List<String> errors;
-    private final UserRepository userRepository;
+    private final User user;
 
-    public UserValidator(UserRepository user) {
-        this.userRepository = user;
+    public UserValidator(User user) {
+        this.user = user;
         this.errors = new ArrayList<>();
     }
 
-    public boolean validate(String username, String password) {
-//        validateUsername(user.getUsername());
-//        validatePassword(user.getPassword());
-        errors.clear();
-        validateEmailUniqueness(username);
-        validateEmail(username);
-        validatePassword(password);
+    public boolean validate() {
+        validateUsername(user.getUsername());
+        validatePassword(user.getPassword());
 
         return errors.isEmpty();
-    }
-
-    private void validateEmailUniqueness(String email){
-        final boolean response = userRepository.existsByUsername(email);
-        if (response) {
-            errors.add("Email is already taken");
-        }
     }
 
     private void validateEmail(String email){
@@ -43,7 +33,7 @@ public class UserValidator {
         }
     }
     private void validateUsername(String username){
-        if (!Pattern.compile(EMAIL_VALIDATION_REGEX).matcher(username).matches()){
+        if (!Pattern.compile(EMAIL_VALIDATION_REGEX).matcher(username).matches()){ //pentru a fi mai rapid
             errors.add("Email is not valid!");
         }
     }
@@ -63,10 +53,10 @@ public class UserValidator {
     }
 
     private boolean containsSpecialCharacter(String password){
-        if (password == null || password.trim().isEmpty()){
+        if (password == null || password.trim().isEmpty()){  // trim sterge toate spatiile dinainte sau dupa : "  ab cd  " -> trim() -> "ab cd"
             return false;
         }
-        // black list
+        // black list - adica ce nu are voie sa treaca
         Pattern specialCharactersPattern = Pattern.compile("[^A-Za-z0-9]");
         Matcher specialCharactersMatcher = specialCharactersPattern.matcher(password);
 
