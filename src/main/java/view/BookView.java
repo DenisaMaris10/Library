@@ -11,7 +11,6 @@ import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
 import javafx.event.EventHandler;
 import javafx.event.ActionEvent;
-import model.Book;
 import view.model.BookDTO;
 
 import java.util.List;
@@ -23,13 +22,14 @@ public class BookView {
     //private final ObservableList<Order> ordersObservableList;
     private TextField authorTextField;
     private TextField titleTextField;
-    //private TextField quantityTextField;
+    private TextField quantityTextField;
     private Label authorLabel;
     private Label titleLabel;
-    //private Label quantityLabel;
+    private Label quantityLabel;
     private Button saveButton;
     private Button deleteButton;
-    //private Button orderButton;
+    private Button orderButton;
+    private Scene scene;
 
     public BookView(Stage primaryStage, List<BookDTO> books){
         primaryStage.setTitle("Library");
@@ -42,7 +42,8 @@ public class BookView {
 
         booksObservableList = FXCollections.observableArrayList(books); //daca schimbam referinta la booksObservableList pierdem legatura cu tabelul
         initTableView(gridPane);
-        initSaveOptions(gridPane);
+        initSaveBookOptions(gridPane);
+        initOrderBooksOptions(gridPane);
         primaryStage.show();
     }
 
@@ -67,7 +68,7 @@ public class BookView {
         gridPane.add(bookTableView, 0, 0, 5, 1);
     }
 
-    private void initSaveOptions(GridPane gridPane){
+    private void initSaveBookOptions(GridPane gridPane){
         titleLabel = new Label("Title");
         gridPane.add(titleLabel, 1, 1);
 
@@ -87,12 +88,28 @@ public class BookView {
         gridPane.add(deleteButton, 6, 1);
     }
 
+    private void initOrderBooksOptions(GridPane gridPane){
+        quantityLabel = new Label("Quantity ");
+        gridPane.add(quantityLabel, 1, 2);
+
+        quantityTextField = new TextField();
+        quantityTextField.setPromptText("Ex. 2");
+        gridPane.add(quantityTextField, 2, 2);
+
+        orderButton = new Button("Order");
+        gridPane.add(orderButton, 3, 2);
+    }
+
     public void addSaveButtonListener(EventHandler<ActionEvent> saveButtonListener){
         saveButton.setOnAction(saveButtonListener);
     }
 
     public void addDeleteButtonListener(EventHandler<ActionEvent> deleteButtonListener){
         deleteButton.setOnAction(deleteButtonListener);
+    }
+
+    public void addOrderButtonListener(EventHandler<ActionEvent> orderButtonListener){
+        orderButton.setOnAction(orderButtonListener);
     }
 
     public void addDisplayAlertMessage(String title, String header, String content){

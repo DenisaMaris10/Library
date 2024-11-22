@@ -18,6 +18,7 @@ public class BookController {
 
         this.bookView.addSaveButtonListener(new SaveButtonListener());
         this.bookView.addDeleteButtonListener(new DeleteButtonListener());
+        this.bookView.addOrderButtonListener(new OrderButtonListener());
     }
 
     private class SaveButtonListener implements EventHandler<ActionEvent> {
@@ -67,5 +68,12 @@ public class BookController {
     }
 
 
+    private class OrderButtonListener implements EventHandler<ActionEvent>{
+
+        @Override
+        public void handle(ActionEvent actionEvent) {
+            BookDTO bookDTO = (BookDTO) bookView.getBookTableView().getSelectionModel().getSelectedItem();
+        }
+    }
 
 }

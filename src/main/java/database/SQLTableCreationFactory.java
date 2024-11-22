@@ -1,11 +1,6 @@
 package database;
 
-import static database.Constants.Tables.BOOK;
-import static database.Constants.Tables.RIGHT;
-import static database.Constants.Tables.ROLE;
-import static database.Constants.Tables.ROLE_RIGHT;
-import static database.Constants.Tables.USER;
-import static database.Constants.Tables.USER_ROLE;
+import static database.Constants.Tables.*;
 
 public class SQLTableCreationFactory {
 
@@ -15,6 +10,8 @@ public class SQLTableCreationFactory {
                     "  id int(11) NOT NULL AUTO_INCREMENT," +
                     "  author varchar(500) NOT NULL," +
                     "  title varchar(500) NOT NULL," +
+                    "  price int NOT NULL," +
+                    "  stock int NOT NULL," +
                     "  publishedDate datetime DEFAULT NULL," +
                     "  PRIMARY KEY (id)," +
                     "  UNIQUE KEY id_UNIQUE (id)" +
@@ -74,6 +71,16 @@ public class SQLTableCreationFactory {
                     "    REFERENCES role (id)" +
                     "    ON DELETE CASCADE" +
                     "    ON UPDATE CASCADE);";
+            case ORDER -> "CREATE TABLE IF NOT EXISTS `order` (" +
+                    "  id int(11) NOT NULL AUTO_INCREMENT," +
+                    "  user_id int(11) NOT NULL," +
+                    "  book_author varchar(500) NOT NULL," +
+                    "  book_title varchar(500) NOT NULL," +
+                    "  quantity int NOT NULL," +
+                    "  total_price int NOT NULL," +
+                    "  timestamp datetime DEFAULT NULL," +
+                    "  PRIMARY KEY (id)," +
+                    "  UNIQUE KEY id_UNIQUE (id));";
             default -> "";
         };
     }
