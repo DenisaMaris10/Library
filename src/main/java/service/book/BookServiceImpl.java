@@ -41,4 +41,15 @@ public class BookServiceImpl implements BookService {
 
         return (int) ChronoUnit.YEARS.between(book.getPublishedDate(), now);
     }
+
+    @Override
+    public Book findByTitleAndAuthor(Book book) {
+        return bookRepository.findByTitleAndAuthor(book)
+                .orElseThrow(()->new IllegalArgumentException("Book with Title: %s and Author: %s  was not found.".formatted(book.getTitle(), book.getAuthor())));
+    }
+
+    @Override
+    public boolean update(Book book) {
+        return bookRepository.update(book);
+    }
 }

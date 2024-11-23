@@ -44,7 +44,8 @@ public class LoginController {
                 loginView.setActionTargetText(loginNotification.getFormattedErrors());
             }else{
                 loginView.setActionTargetText("LogIn Successfull!");
-                EmployeeComponentFactory.getInstance(LoginComponentFactory.getComponentsForTests(), LoginComponentFactory.getStage());
+                EmployeeComponentFactory instance = EmployeeComponentFactory.getInstance(LoginComponentFactory.getComponentsForTests(), LoginComponentFactory.getStage());
+                instance.getBookController().setUserId(loginNotification.getResult().getId()); //trimitem catre controller id-ul userului; avem nevoie de el pentru functionalitatea de sale (userId din order)
             }
         }
     }

@@ -11,6 +11,7 @@ import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
 import javafx.event.EventHandler;
 import javafx.event.ActionEvent;
+import org.w3c.dom.Text;
 import view.model.BookDTO;
 
 import java.util.List;
@@ -22,9 +23,13 @@ public class BookView {
     //private final ObservableList<Order> ordersObservableList;
     private TextField authorTextField;
     private TextField titleTextField;
+    private TextField bookPriceTextField;
+    private TextField bookStockTextField;
     private TextField quantityTextField;
     private Label authorLabel;
     private Label titleLabel;
+    private Label bookPriceLabel;
+    private Label bookStockLabel;
     private Label quantityLabel;
     private Button saveButton;
     private Button deleteButton;
@@ -37,7 +42,7 @@ public class BookView {
         GridPane gridPane = new GridPane();
         initializeGridPane(gridPane); // vom adauga un tabel in gridPane
 
-        Scene scene = new Scene(gridPane, 720, 480);
+        Scene scene = new Scene(gridPane, 900, 900);
         primaryStage.setScene(scene);
 
         booksObservableList = FXCollections.observableArrayList(books); //daca schimbam referinta la booksObservableList pierdem legatura cu tabelul
@@ -61,25 +66,38 @@ public class BookView {
         titleColumn.setCellValueFactory(new PropertyValueFactory<>("title"));
         TableColumn<BookDTO, String> authorColumn = new TableColumn<BookDTO, String>("Author"); // numele coloanei efective
         authorColumn.setCellValueFactory(new PropertyValueFactory<>("author"));
+        TableColumn<BookDTO, Integer> priceColumn = new TableColumn<>("Price");
+        priceColumn.setCellValueFactory(new PropertyValueFactory<>("price"));
+        TableColumn<BookDTO, Integer> stockColumn = new TableColumn<>("Stock");
+        stockColumn.setCellValueFactory(new PropertyValueFactory<>("stock"));
 
 
-        bookTableView.getColumns().addAll(titleColumn, authorColumn);
+        bookTableView.getColumns().addAll(titleColumn, authorColumn, priceColumn, stockColumn);
         bookTableView.setItems(booksObservableList);
         gridPane.add(bookTableView, 0, 0, 5, 1);
     }
 
     private void initSaveBookOptions(GridPane gridPane){
+
         titleLabel = new Label("Title");
         gridPane.add(titleLabel, 1, 1);
-
         titleTextField = new TextField();
         gridPane.add(titleTextField, 2, 1);
 
         authorLabel = new Label("Author");
         gridPane.add(authorLabel, 3, 1);
-
         authorTextField = new TextField();
         gridPane.add(authorTextField, 4, 1);
+
+        bookPriceLabel = new Label("Price");
+        gridPane.add(bookPriceLabel, 1, 2);
+        bookPriceTextField = new TextField();
+        gridPane.add(bookPriceTextField, 2, 2);
+
+        bookStockLabel = new Label("Stock");
+        gridPane.add(bookStockLabel, 3, 2);
+        bookStockTextField = new TextField();
+        gridPane.add(bookStockTextField, 4, 2);
 
         saveButton = new Button("Save");
         gridPane.add(saveButton, 5, 1);
@@ -90,14 +108,14 @@ public class BookView {
 
     private void initOrderBooksOptions(GridPane gridPane){
         quantityLabel = new Label("Quantity ");
-        gridPane.add(quantityLabel, 1, 2);
+        gridPane.add(quantityLabel, 5, 0);
 
         quantityTextField = new TextField();
         quantityTextField.setPromptText("Ex. 2");
-        gridPane.add(quantityTextField, 2, 2);
+        gridPane.add(quantityTextField, 6, 0);
 
         orderButton = new Button("Order");
-        gridPane.add(orderButton, 3, 2);
+        gridPane.add(orderButton, 7, 0);
     }
 
     public void addSaveButtonListener(EventHandler<ActionEvent> saveButtonListener){
@@ -127,6 +145,18 @@ public class BookView {
 
     public String getAuthor(){
         return authorTextField.getText();
+    }
+
+    public String getPrice(){
+        return bookPriceTextField.getText();
+    }
+
+    public String getStock(){
+        return bookStockTextField.getText();
+    }
+
+    public String getQuantity(){
+        return quantityTextField.getText();
     }
 
     public void addBookObservableList(BookDTO bookDTO){

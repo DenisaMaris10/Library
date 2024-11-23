@@ -47,7 +47,7 @@ public class EmployeeComponentFactory {
         this.orderService = new OrderServiceImpl(orderRepository);
         List<BookDTO> booksDTOs = BookMapper.convertBookListToBookDTOList(bookService.findAll());
         this.bookView = new BookView(primaryStage, booksDTOs);
-        this.bookController = new BookController(bookView, bookService);
+        this.bookController = new BookController(bookView, bookService, orderService);
     }
 
     public BookView getBookView() {

@@ -51,4 +51,20 @@ public class BookRepositoryCacheDecorator extends BookRepositoryDecorator{
         cache.invalidateCache();
         decoratedBookRepository.removeAll();
     }
+
+    @Override
+    public Optional<Book> findByTitleAndAuthor(Book book) {
+        if(cache.hasResult()){
+            return cache.load().stream()
+                    .filter(it->it.getTitle().equals(book.getTitle()) && it.getAuthor().equals(book.getAuthor()))
+                    .findFirst();
+        }
+        return decoratedBookRepository.findByTitleAndAuthor(book);
+    }
+
+    @Override
+    public boolean update(Book book) {
+        cache.invalidateCache();
+        return decoratedBookRepository.update(book);
+    }
 }
