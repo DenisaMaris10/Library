@@ -7,6 +7,8 @@ public class Book {
     private String title;
     private String author;
     private LocalDate publishedDate;
+    private Integer price;
+    private Integer stock;
 
     public Long getId() {
         return id;
@@ -34,6 +36,22 @@ public class Book {
 
     public void setAuthor(String author) {
         this.author = author;
+    }
+
+    public Integer getPrice() {
+        return price;
+    }
+
+    public Integer getStock() {
+        return stock;
+    }
+
+    public void setPrice(Integer price) {
+        this.price = price;
+    }
+
+    public void setStock(Integer stock) {
+        this.stock = stock;
     }
 
     public void setPublishedDate(LocalDate publishedDate) {

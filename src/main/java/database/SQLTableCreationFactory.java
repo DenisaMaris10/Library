@@ -1,24 +1,20 @@
 package database;
 
-import static database.Constants.Tables.BOOK;
-import static database.Constants.Tables.RIGHT;
-import static database.Constants.Tables.ROLE;
-import static database.Constants.Tables.ROLE_RIGHT;
-import static database.Constants.Tables.USER;
-import static database.Constants.Tables.USER_ROLE;
+import static database.Constants.Tables.*;
 
 public class SQLTableCreationFactory {
 
     public String getCreateSQLForTable(String table) {
         return switch (table) {
-            case BOOK -> "CREATE TABLE IF NOT EXISTS book (" +
-                    "  id int(11) NOT NULL AUTO_INCREMENT," +
-                    "  author varchar(500) NOT NULL," +
-                    "  title varchar(500) NOT NULL," +
-                    "  publishedDate datetime DEFAULT NULL," +
-                    "  PRIMARY KEY (id)," +
-                    "  UNIQUE KEY id_UNIQUE (id)" +
-                    ") ENGINE=InnoDB AUTO_INCREMENT=0 DEFAULT CHARSET=utf8;";
+            case BOOK ->"CREATE TABLE IF NOT EXISTS book (\n" +
+                    "id int(11) NOT NULL AUTO_INCREMENT,\n" +
+                    "author varchar(500) NOT NULL,\n" +
+                    "title varchar(500) NOT NULL,\n" +
+                    "price INT NOT NULL,\n" +
+                    "stock INT NOT NULL,\n" +
+                    "publishedDate datetime DEFAULT NULL,\n" +
+                    "PRIMARY KEY (id),\n" +
+                    "UNIQUE KEY id_UNIQUE (id)) ENGINE=InnoDB AUTO_INCREMENT=0 DEFAULT CHARSET=utf8;";
             case USER -> "CREATE TABLE IF NOT EXISTS user (" +
                     "  id INT NOT NULL AUTO_INCREMENT," +
                     "  username VARCHAR(200) NOT NULL," +
@@ -74,6 +70,16 @@ public class SQLTableCreationFactory {
                     "    REFERENCES role (id)" +
                     "    ON DELETE CASCADE" +
                     "    ON UPDATE CASCADE);";
+            case ORDER -> "CREATE TABLE IF NOT EXISTS `order` (" +
+                    "  id int(11) NOT NULL AUTO_INCREMENT," +
+                    "  user_id int(11) NOT NULL," +
+                    "  book_author varchar(500) NOT NULL," +
+                    "  book_title varchar(500) NOT NULL," +
+                    "  quantity int NOT NULL," +
+                    "  total_price int NOT NULL," +
+                    "  timestamp datetime DEFAULT NULL," +
+                    "  PRIMARY KEY (id)," +
+                    "  UNIQUE KEY id_UNIQUE (id));";
             default -> "";
         };
     }

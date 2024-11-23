@@ -37,4 +37,14 @@ public class BookRepositoryMock implements BookRepository{
     public void removeAll() {
         books.clear();
     }
+
+    @Override
+    public Optional<Book> findByTitleAndAuthor(Book book) {
+        return Optional.empty();
+    }
+
+    @Override
+    public boolean update(Book book) {
+        return books.add(book);
+    }
 }

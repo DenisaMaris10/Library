@@ -2,14 +2,18 @@ package controller;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 //import launcher.EmployeeComponentFactory;
+import javafx.scene.Scene;
+import launcher.EmployeeComponentFactory;
 import launcher.LoginComponentFactory;
 import model.User;
 //import model.validator.Notification;
 import model.validator.Notification;
 import model.validator.UserValidator;
 import service.user.AuthenticationService;
+import view.BookView;
 import view.LoginView;
 
+import java.util.ArrayList;
 import java.util.EventListener;
 import java.util.List;
 
@@ -36,12 +40,12 @@ public class LoginController {
             String password = loginView.getPassword();
 
             Notification<User> loginNotification = authenticationService.login(username, password);
-
             if (loginNotification.hasErrors()){
                 loginView.setActionTargetText(loginNotification.getFormattedErrors());
             }else{
                 loginView.setActionTargetText("LogIn Successfull!");
-                //EmployeeComponentFactory.getInstance(LoginComponentFactory.getComponentsForTests(), LoginComponentFactory.getStage());
+                EmployeeComponentFactory instance = EmployeeComponentFactory.getInstance(LoginComponentFactory.getComponentsForTests(), LoginComponentFactory.getStage());
+                instance.getBookController().setUserId(loginNotification.getResult().getId()); //trimitem catre controller id-ul userului; avem nevoie de el pentru functionalitatea de sale (userId din order)
             }
         }
     }
