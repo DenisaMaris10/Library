@@ -38,12 +38,17 @@ public class UserRepositoryMySQL implements UserRepository {
     public Notification<User> findByUsernameAndPassword(String username, String password) {
         Notification<User> findByUsernameAndPasswordNotification = new Notification<>();
         try {
-            Statement statement = connection.createStatement();
+//            Statement statement = connection.createStatement();
+//
+//            String fetchUserSql =
+//                    "Select * from `" + USER + "` where `username`=\'" + username + "\' and `password`=\'" + password + "\'";
+//            ResultSet userResultSet = statement.executeQuery(fetchUserSql);
+            PreparedStatement findStatement = connection.prepareStatement("Select * from `" + USER + "` where `username`= ? and `password`= ?");
+            findStatement.setString(1, username);
+            findStatement.setString(2, password);
+            findStatement.executeQuery();
 
-            String fetchUserSql =
-                    "Select * from `" + USER + "` where `username`=\'" + username + "\' and `password`=\'" + password + "\'";
-            ResultSet userResultSet = statement.executeQuery(fetchUserSql);
-
+            ResultSet userResultSet = findStatement.getResultSet();
             if(userResultSet.next()){
                 User user = new UserBuilder()
                         .setId(userResultSet.getLong("id"))
@@ -70,7 +75,7 @@ public class UserRepositoryMySQL implements UserRepository {
     public boolean save(User user) {
         try {
             PreparedStatement insertUserStatement = connection
-                    .prepareStatement("INSERT INTO user values (null, ?, ?)", Statement.RETURN_GENERATED_KEYS); //Statement.RETURN_GENERATED_KEYS ne va returna id-ul pe care l-a atribuit user-ului
+                    .prepareStatement("INSERT INTO `" + USER + "` values (null, ?, ?)", Statement.RETURN_GENERATED_KEYS); //Statement.RETURN_GENERATED_KEYS ne va returna id-ul pe care l-a atribuit user-ului
             insertUserStatement.setString(1, user.getUsername());
             insertUserStatement.setString(2, user.getPassword());
             insertUserStatement.executeUpdate();
@@ -104,11 +109,12 @@ public class UserRepositoryMySQL implements UserRepository {
     @Override
     public boolean existsByUsername(String email) {
         try {
-            Statement statement = connection.createStatement();
-
+//            Statement statement = connection.createStatement();
             String fetchUserSql =
-                    "Select * from `" + USER + "` where `username`=\'" + email + "\'";
-            ResultSet userResultSet = statement.executeQuery(fetchUserSql);
+                    "Select * from `" + USER + "` where `username`= ?";
+            PreparedStatement existsStatement = connection.prepareStatement(fetchUserSql);
+            existsStatement.setString(1, email);
+            ResultSet userResultSet = existsStatement.executeQuery();
             return userResultSet.next();
 
         } catch (SQLException e) {
