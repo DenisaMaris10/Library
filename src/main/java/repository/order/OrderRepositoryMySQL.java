@@ -9,6 +9,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import static database.Constants.Tables.ORDER;
+
 public class OrderRepositoryMySQL implements OrderRepository{
     private final Connection connection;
 
@@ -18,7 +20,7 @@ public class OrderRepositoryMySQL implements OrderRepository{
 
     @Override
     public List<Order> findAll() {
-        String sql = "SELECT * FROM `order`;";
+        String sql = "SELECT * FROM `" + ORDER +"`;";
         List<Order> orders = new ArrayList<>();
 
         try {
@@ -46,7 +48,7 @@ public class OrderRepositoryMySQL implements OrderRepository{
 
     @Override
     public Optional<Order> findById(Long id) {
-        String sql  = "SELECT * FROM `order` WHERE id=" + id;
+        String sql  = "SELECT * FROM `" + ORDER +"` WHERE id=" + id;
 
         Optional<Order> order = Optional.empty();
         try{
@@ -64,7 +66,7 @@ public class OrderRepositoryMySQL implements OrderRepository{
 
     @Override
     public List<Order> findByUserId(Long id) {
-        String sql = "SELECT * FROM `order` WHERE user_id=" + id;
+        String sql = "SELECT * FROM `" + ORDER + "` WHERE user_id=" + id;
         List<Order> orders = new ArrayList<>();
 
         try {
@@ -82,7 +84,7 @@ public class OrderRepositoryMySQL implements OrderRepository{
 
     @Override
     public boolean save(Order order) {
-        String newSql = "INSERT INTO `order` VALUES(null, ?, ?, ?, ?, ?, ?);";
+        String newSql = "INSERT INTO `" + ORDER +"` VALUES(null, ?, ?, ?, ?, ?, ?);";
 
         try{
             PreparedStatement preparedStatement = connection.prepareStatement(newSql);
