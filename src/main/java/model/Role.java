@@ -13,6 +13,10 @@ public class Role {
         this.rights = rights;
     }
 
+    public Role(String role){
+        this.role = role;
+    }
+
     public Long getId() {
         return id;
     }
@@ -36,4 +40,5 @@ public class Role {
     public List<Right> getRights() {
         return rights;
     }
+
 }

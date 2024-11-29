@@ -39,4 +39,12 @@ public class User {
     public List<Role> getRoles() {
         return roles;
     }
+
+    public Role getFirstRole(){
+        return roles.getFirst(); // folosesc doar primul element, deoarece momentan ne gandim ca un user are un singur rol
+    }
+
+    public void setFirstRole(Role role){
+        this.roles.addFirst(role);
+    }
 }

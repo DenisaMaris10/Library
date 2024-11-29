@@ -14,24 +14,24 @@ import java.util.List;
 public class Main {
 
     public static void main(String[] args){
-        Order order = new OrderBuilder().setId(10L)
-                .setUserId(1L)
-                .setBookAuthor("Liviu Rebreanu")
-                .setBookTitle("Ion")
-                .setQuantity(3)
-                .setTotalPrice(100)
-                .setTimestamp(LocalDate.now())
-                .build();
-
-        Connection connection = DatabaseConnectionFactory.getConnectionWrapper(true).getConnection();
-        OrderRepository orderRepository = new OrderRepositoryMySQL(connection);
-        OrderService orderService = new OrderServiceImpl(orderRepository);
-
-        orderService.save(order);
-
-        List<Order> orders = orderService.findAll();
-        System.out.println(orders);
-
-        System.out.println(order);
+//        Order order = new OrderBuilder().setId(10L)
+//                .setUserId(1L)
+//                .setBookAuthor("Liviu Rebreanu")
+//                .setBookTitle("Ion")
+//                .setQuantity(3)
+//                .setTotalPrice(100)
+//                .setTimestamp(LocalDate.now())
+//                .build();
+//
+//        Connection connection = DatabaseConnectionFactory.getConnectionWrapper(true).getConnection();
+//        OrderRepository orderRepository = new OrderRepositoryMySQL(connection);
+//        OrderService orderService = new OrderServiceImpl(orderRepository);
+//
+//        orderService.save(order);
+//
+//        List<Order> orders = orderService.findAll();
+//        System.out.println(orders);
+//
+//        System.out.println(order);
     }
 }

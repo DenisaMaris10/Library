@@ -26,21 +26,24 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     }
 
     @Override
-    public Notification<Boolean> register(String username, String password) {
+    public Notification<Boolean> customerRegister(String username, String password) {
+        Role customerRole = rightsRolesRepository.findRoleByTitle(CUSTOMER); // doar customerii vor putea sa se inregistreze direct de pe platforma, angajatii vor fi creati de catre admini
+        return genericRegister(username, password, customerRole);
+    }
 
+    @Override
+    public Notification<Boolean> genericRegister(String username, String password, Role role){
         //Prin criptare, de la un mesaj criptat ne putem intoarce la mesajul decriptat: mesaj -> fdnaklfnfjksgsgss -> mesaj
         // o parola simpla se va transforma intr-un hash
         // Dintr-un hash nu ma pot intoarce la mesajul initial
         // Hashing ex: parolasimpla -> fhalnjdfnslasjfd
-        Role customerRole = rightsRolesRepository.findRoleByTitle(CUSTOMER); // doar customerii vor putea sa se inregistreze direct de pe platforma, angajatii vor fi creati de catre admini
 
         User user = new UserBuilder()
                 .setUsername(username)
                 .setPassword(password)
-                .setRoles(Collections.singletonList(customerRole)) //lista imutabila si care are o singura copie
+                .setRoles(Collections.singletonList(role)) //lista imutabila si care are o singura copie
                 .build();
 
-        String encodedPassword = hashPassword(password);
         UserValidator userValidator = new UserValidator(user);
 
         boolean userValid = userValidator.validate();

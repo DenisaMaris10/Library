@@ -1,17 +1,22 @@
 package database;
+import model.Role;
+import model.User;
+import model.builder.UserBuilder;
+import model.validator.Notification;
 import repository.security.RightsRolesRepository;
 import repository.security.RightsRolesRepositoryMySQL;
+import repository.user.UserRepository;
+import repository.user.UserRepositoryMySQL;
 
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import static database.Constants.Rights.RIGHTS;
 import static database.Constants.Roles.ROLES;
 import static database.Constants.Schemas.SCHEMAS;
+import static database.Constants.Tables.USER;
 import static database.Constants.getRolesRights;
 
 // Script - cod care automatizeaza anumiti pasi sau procese
@@ -19,6 +24,7 @@ import static database.Constants.getRolesRights;
 public class Bootstrap {
 
     private static RightsRolesRepository rightsRolesRepository;
+    private static UserRepository userRepository;
 
     public static void main(String[] args) throws SQLException {
         dropAll();
@@ -26,6 +32,7 @@ public class Bootstrap {
         bootstrapTables();
 
         bootstrapUserData();
+
     }
 
     private static void dropAll() throws SQLException {
@@ -87,11 +94,13 @@ public class Bootstrap {
 
             JDBConnectionWrapper connectionWrapper = new JDBConnectionWrapper(schema);
             rightsRolesRepository = new RightsRolesRepositoryMySQL(connectionWrapper.getConnection());
+            userRepository = new UserRepositoryMySQL(connectionWrapper.getConnection(), rightsRolesRepository);
 
             bootstrapRoles();
             bootstrapRights();
             bootstrapRoleRight();
             bootstrapUserRoles();
+            bootstrapAdminData(userRepository, connectionWrapper.getConnection());
         }
     }
 
@@ -119,6 +128,22 @@ public class Bootstrap {
                 rightsRolesRepository.addRoleRight(roleId, rightId);
             }
         }
+    }
+
+    private static void bootstrapAdminData(UserRepository userRepository, Connection connection) throws SQLException{
+        String sql = "INSERT INTO `" + USER + "` VALUES(NULL, 'denisa.maris10@gmail.com', '08c38a5a45155844d51c26ec60418df2765d47a7eaad9b41b100f32a33394c8d', 'administrator');"; // punem hash-ul parolei (generat pe net)
+        Statement statement = connection.createStatement();
+        statement.execute(sql);
+
+        Notification<User> admin = userRepository.findByUsernameAndPassword("denisa.maris10@gmail.com", "08c38a5a45155844d51c26ec60418df2765d47a7eaad9b41b100f32a33394c8d");
+        if (admin.hasErrors()){
+            System.out.println("Nu exista adminul");
+        }
+        else {
+            Role role = rightsRolesRepository.findRoleById(1L);
+            rightsRolesRepository.addRolesToUser(admin.getResult(), Collections.singletonList(role));
+        }
+
     }
 
     private static void bootstrapUserRoles() throws SQLException {
