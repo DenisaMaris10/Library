@@ -28,18 +28,18 @@ public class EmployeeComponentFactory {
     private final OrderService orderService;
     private static volatile EmployeeComponentFactory instance;
 
-    public static EmployeeComponentFactory getInstance(Boolean componentsForTest, Stage primaryStage ){
+    public static EmployeeComponentFactory getInstance(Boolean componentsForTest, Stage primaryStage, Long userId){
         if(instance == null){
             synchronized (EmployeeComponentFactory.class) {
                 if(instance == null) {
-                    instance = new EmployeeComponentFactory(componentsForTest, primaryStage);
+                    instance = new EmployeeComponentFactory(componentsForTest, primaryStage, userId);
                 }
             }
         }
         return instance;
     }
 
-    private EmployeeComponentFactory(Boolean componentsForTest, Stage primaryStage){
+    private EmployeeComponentFactory(Boolean componentsForTest, Stage primaryStage, Long userId){
         Connection connection = DatabaseConnectionFactory.getConnectionWrapper(componentsForTest).getConnection();
         this.bookRepository = new BookRepositoryMySQL(connection);
         this.bookService = new BookServiceImpl(bookRepository);
@@ -47,7 +47,7 @@ public class EmployeeComponentFactory {
         this.orderService = new OrderServiceImpl(orderRepository);
         List<BookDTO> booksDTOs = BookMapper.convertBookListToBookDTOList(bookService.findAll());
         this.bookView = new BookView(primaryStage, booksDTOs);
-        this.bookController = new BookController(bookView, bookService, orderService);
+        this.bookController = new BookController(bookView, bookService, orderService, userId);
     }
 
     public BookView getBookView() {

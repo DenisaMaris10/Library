@@ -1,5 +1,8 @@
 package repository.user;
+import model.Book;
+import model.Role;
 import model.User;
+import model.builder.BookBuilder;
 import model.builder.UserBuilder;
 import model.validator.Notification;
 import repository.security.RightsRolesRepository;
@@ -9,8 +12,11 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
+import static database.Constants.Tables.BOOK;
 import static database.Constants.Tables.USER;
 
 public class UserRepositoryMySQL implements UserRepository {
@@ -26,7 +32,20 @@ public class UserRepositoryMySQL implements UserRepository {
 
     @Override
     public List<User> findAll() {
-        return null;
+        String sql = "SELECT * FROM `" + USER + "`";
+        List<User> users = new ArrayList<>();
+
+        try {
+            Statement statement = connection.createStatement();
+            ResultSet resultSet = statement.executeQuery(sql);
+
+            while(resultSet.next()){
+                users.add(getUserFromResultSet(resultSet));
+            }
+        }catch(SQLException e){
+            e.printStackTrace();
+        }
+        return users;
     }
 
     // SQL Injection Attacks should not work after fixing functions
@@ -38,11 +57,6 @@ public class UserRepositoryMySQL implements UserRepository {
     public Notification<User> findByUsernameAndPassword(String username, String password) {
         Notification<User> findByUsernameAndPasswordNotification = new Notification<>();
         try {
-//            Statement statement = connection.createStatement();
-//
-//            String fetchUserSql =
-//                    "Select * from `" + USER + "` where `username`=\'" + username + "\' and `password`=\'" + password + "\'";
-//            ResultSet userResultSet = statement.executeQuery(fetchUserSql);
             PreparedStatement findStatement = connection.prepareStatement("Select * from `" + USER + "` where `username`= ? and `password`= ?");
             findStatement.setString(1, username);
             findStatement.setString(2, password);
@@ -75,9 +89,10 @@ public class UserRepositoryMySQL implements UserRepository {
     public boolean save(User user) {
         try {
             PreparedStatement insertUserStatement = connection
-                    .prepareStatement("INSERT INTO `" + USER + "` values (null, ?, ?)", Statement.RETURN_GENERATED_KEYS); //Statement.RETURN_GENERATED_KEYS ne va returna id-ul pe care l-a atribuit user-ului
+                    .prepareStatement("INSERT INTO `" + USER + "` values (null, ?, ?, ?)", Statement.RETURN_GENERATED_KEYS); //Statement.RETURN_GENERATED_KEYS ne va returna id-ul pe care l-a atribuit user-ului
             insertUserStatement.setString(1, user.getUsername());
             insertUserStatement.setString(2, user.getPassword());
+            insertUserStatement.setString(3, user.getFirstRole().getRole());
             insertUserStatement.executeUpdate();
 
             ResultSet rs = insertUserStatement.getGeneratedKeys();
@@ -94,6 +109,22 @@ public class UserRepositoryMySQL implements UserRepository {
         }
 
     }
+
+    @Override
+    public boolean delete(User user) {
+        String sql = "DELETE FROM `" + USER + "` WHERE id=\'" + user.getId() +"\' AND username=\'" + user.getUsername()+"\';";
+
+        try{
+            Statement statement = connection.createStatement();
+            statement.executeUpdate(sql);
+
+        } catch (SQLException e){
+            e.printStackTrace();
+            return false;
+        }
+        return true;
+    }
+
 
     @Override
     public void removeAll() {
@@ -121,6 +152,22 @@ public class UserRepositoryMySQL implements UserRepository {
             e.printStackTrace();
             return false;
         }
+    }
+
+    private User getUserFromResultSet(ResultSet resultSet) throws SQLException {
+        try {
+            return new UserBuilder().setId(resultSet.getLong("id"))
+                    .setUsername(resultSet.getString("username"))
+                    .setPassword(resultSet.getString("password"))
+                    .setRoles(new ArrayList<>())
+                    .setFirstRole(new Role(resultSet.getString("role")))
+                    .build();
+        }
+        catch (Exception e){
+            System.out.println(e.getMessage());
+            int a = 0;
+        }
+        return null;
     }
 
 }

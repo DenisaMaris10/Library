@@ -32,6 +32,11 @@ public class UserBuilder {
         return this;
     }
 
+    public UserBuilder setFirstRole(Role role){
+        user.setFirstRole(role);
+        return this;
+    }
+
     public User build(){
         return user;
     }

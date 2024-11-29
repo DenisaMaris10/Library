@@ -3,8 +3,10 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 //import launcher.EmployeeComponentFactory;
 import javafx.scene.Scene;
+import launcher.AdminComponentFactory;
 import launcher.EmployeeComponentFactory;
 import launcher.LoginComponentFactory;
+import model.Role;
 import model.User;
 //import model.validator.Notification;
 import model.validator.Notification;
@@ -16,6 +18,8 @@ import view.LoginView;
 import java.util.ArrayList;
 import java.util.EventListener;
 import java.util.List;
+
+import static database.Constants.Roles.ADMINISTRATOR;
 
 public class LoginController {
 
@@ -44,8 +48,13 @@ public class LoginController {
                 loginView.setActionTargetText(loginNotification.getFormattedErrors());
             }else{
                 loginView.setActionTargetText("LogIn Successfull!");
-                EmployeeComponentFactory instance = EmployeeComponentFactory.getInstance(LoginComponentFactory.getComponentsForTests(), LoginComponentFactory.getStage());
-                instance.getBookController().setUserId(loginNotification.getResult().getId()); //trimitem catre controller id-ul userului; avem nevoie de el pentru functionalitatea de sale (userId din order)
+                User user = loginNotification.getResult();
+                if (user.getFirstRole().getRole().equals(ADMINISTRATOR)){
+                    AdminComponentFactory instance = AdminComponentFactory.getInstance(LoginComponentFactory.getComponentsForTests(), LoginComponentFactory.getStage(), loginNotification.getResult().getId());
+                }
+                else {
+                    EmployeeComponentFactory instance = EmployeeComponentFactory.getInstance(LoginComponentFactory.getComponentsForTests(), LoginComponentFactory.getStage(), loginNotification.getResult().getId()); //trimitem catre controller id-ul userului; avem nevoie de el pentru functionalitatea de sale (userId din order)
+                }
             }
         }
     }
@@ -57,7 +66,7 @@ public class LoginController {
             String username = loginView.getUsername();
             String password = loginView.getPassword();
 
-            Notification<Boolean> registerNotification = authenticationService.register(username, password);
+            Notification<Boolean> registerNotification = authenticationService.customerRegister(username, password);
 
             if (registerNotification.hasErrors()) {
                 loginView.setActionTargetText(registerNotification.getFormattedErrors());

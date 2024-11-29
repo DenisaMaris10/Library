@@ -20,10 +20,11 @@ public class BookController {
     private final BookService bookService;
     private final OrderService orderService;
     private Long userId;
-    public BookController(BookView bookView, BookService bookService, OrderService orderService){
+    public BookController(BookView bookView, BookService bookService, OrderService orderService, Long userId){
         this.bookView = bookView;
         this.bookService = bookService;
         this.orderService = orderService;
+        this.userId = userId;
 
         this.bookView.addSaveButtonListener(new SaveButtonListener());
         this.bookView.addDeleteButtonListener(new DeleteButtonListener());

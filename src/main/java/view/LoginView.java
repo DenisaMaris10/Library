@@ -39,7 +39,7 @@ public class LoginView {
 
         initializeFields(gridPane);
 
-        primaryStage = primaryStage;
+        this.primaryStage = primaryStage;
 
         primaryStage.show();
     }
