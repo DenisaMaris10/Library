@@ -2,7 +2,9 @@ package repository.order;
 
 import model.Book;
 import model.Order;
+import model.UserReport;
 import model.builder.OrderBuilder;
+import model.builder.UserReportBuilder;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -10,6 +12,7 @@ import java.util.List;
 import java.util.Optional;
 
 import static database.Constants.Tables.ORDER;
+import static database.Constants.Tables.USER;
 
 public class OrderRepositoryMySQL implements OrderRepository{
     private final Connection connection;
@@ -104,4 +107,5 @@ public class OrderRepositoryMySQL implements OrderRepository{
             return false;
         }
     }
+
 }

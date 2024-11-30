@@ -85,16 +85,16 @@ public class AdminView {
         gridPane.add(usernameTextField, 2, 1);
 
         passwordLabel = new Label("Password:");
-        gridPane.add(passwordLabel, 3, 1);
+        gridPane.add(passwordLabel, 1, 2);
         passwordTextField = new TextField();
         passwordTextField.setPromptText("password");
-        gridPane.add(passwordTextField, 4, 1);
+        gridPane.add(passwordTextField, 2, 2);
 
         addButton = new Button("Add User");
-        gridPane.add(addButton, 5, 1);
+        gridPane.add(addButton, 3, 1);
 
         deleteButton = new Button("Delete User");
-        gridPane.add(deleteButton, 6, 1);
+        gridPane.add(deleteButton, 3, 2);
     }
 
     private void initReportAndLogout(GridPane gridPane){
@@ -102,7 +102,7 @@ public class AdminView {
         gridPane.add(reportButton, 7, 1);
 
         logOutButton = new Button("LogOut");
-        gridPane.add(logOutButton, 4, 2);
+        gridPane.add(logOutButton, 2, 3);
     }
 
     private void initRoleMenu(GridPane gridPane){

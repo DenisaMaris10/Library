@@ -2,36 +2,32 @@ package controller;
 
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
-import javafx.scene.control.MenuItem;
-import mapper.BookMapper;
 import mapper.UserMapper;
 import model.Role;
 import model.validator.Notification;
 import repository.security.RightsRolesRepository;
+import service.rights_roles.RightsRolesService;
 import service.user.AuthenticationService;
-import service.user.AuthenticationServiceImpl;
+import service.user.ReportGenerationService;
 import service.user.UserService;
 import view.AdminView;
-import view.model.BookDTO;
 import view.model.UserDTO;
-import view.model.builder.BookDTOBuilder;
 import view.model.builder.UserDTOBuilder;
-
-import javax.swing.event.MenuListener;
-
-import static database.Constants.Roles.*;
 
 public class AdminController {
     private final AdminView adminView;
     private final UserService userService;
-    private final RightsRolesRepository rightsRolesRepository;  /** aici trebuie sa modific sa fac un service cred**/
+    private final RightsRolesService rightsRolesService;  /** aici trebuie sa modific sa fac un service cred**/
     private final AuthenticationService authenticationService;
+    private final ReportGenerationService reportGenerationService;
     private Long userId;
-    public AdminController(AdminView adminView, UserService userService, RightsRolesRepository rightsRolesRepository, AuthenticationService authenticationService, Long userId){
+
+    public AdminController(AdminView adminView, UserService userService, RightsRolesService rightsRolesRepository, AuthenticationService authenticationService, ReportGenerationService reportGenerationService, Long userId){
         this.adminView = adminView;
         this.userService = userService;
-        this.rightsRolesRepository = rightsRolesRepository;
+        this.rightsRolesService = rightsRolesRepository;
         this.authenticationService = authenticationService;
+        this.reportGenerationService = reportGenerationService;
         this.userId = userId;
 
         this.adminView.addAddButtonListener(new AddButtonListener());
@@ -53,7 +49,7 @@ public class AdminController {
             }
             else{
                 if (role == null) {
-                    adminView.setRole(rightsRolesRepository.findRoleByTitle("ADMINISTRATOR"));
+                    adminView.setRole(rightsRolesService.findRoleByTitle("ADMINISTRATOR"));
                     role = adminView.getRole();
                 }
                 UserDTO userDTO = new UserDTOBuilder().setUsername(username).setRole(role).build();
@@ -93,7 +89,7 @@ public class AdminController {
 
         @Override
         public void handle(ActionEvent actionEvent) {
-
+            reportGenerationService.generateReport();
         }
     }
 
@@ -102,7 +98,7 @@ public class AdminController {
         @Override
         public void handle(ActionEvent actionEvent) {
             String selectedRole = adminView.getSelectedRole();
-            Role role = rightsRolesRepository.findRoleByTitle(selectedRole);
+            Role role = rightsRolesService.findRoleByTitle(selectedRole);
             adminView.setRole(role);
         }
     }

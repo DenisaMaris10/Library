@@ -2,6 +2,7 @@ package service.order;
 
 
 import model.Order;
+import model.UserReport;
 
 import java.util.List;
 
@@ -10,4 +11,5 @@ public interface OrderService {
     Order findById(Long id);  //aici nu mai trebuie sa fie cu Optional?
     List<Order> findByUserId(Long id);
     boolean save(Order book);
+
 }
