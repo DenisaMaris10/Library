@@ -86,33 +86,44 @@ public class UserRepositoryMySQL implements UserRepository {
 
     //pentru a introduce un utilizator nou in baza de date
     @Override
-    public boolean save(User user) {
+    public Notification<Boolean> save(User user) {
+        Notification<Boolean> result = new Notification<>();
         try {
-            PreparedStatement insertUserStatement = connection
-                    .prepareStatement("INSERT INTO `" + USER + "` values (null, ?, ?, ?)", Statement.RETURN_GENERATED_KEYS); //Statement.RETURN_GENERATED_KEYS ne va returna id-ul pe care l-a atribuit user-ului
-            insertUserStatement.setString(1, user.getUsername());
-            insertUserStatement.setString(2, user.getPassword());
-            insertUserStatement.setString(3, user.getFirstRole().getRole());
-            insertUserStatement.executeUpdate();
 
-            ResultSet rs = insertUserStatement.getGeneratedKeys();
-            rs.next();
-            long userId = rs.getLong(1);
-            user.setId(userId);
+            Notification<User> alreadyExists = findByUsernameAndPassword(user.getUsername(), user.getPassword());
+            if  (alreadyExists.hasErrors()) {
+                PreparedStatement insertUserStatement = connection
+                        .prepareStatement("INSERT INTO `" + USER + "` values (null, ?, ?, ?)", Statement.RETURN_GENERATED_KEYS); //Statement.RETURN_GENERATED_KEYS ne va returna id-ul pe care l-a atribuit user-ului
+                insertUserStatement.setString(1, user.getUsername());
+                insertUserStatement.setString(2, user.getPassword());
+                insertUserStatement.setString(3, user.getFirstRole().getRole());
+                insertUserStatement.executeUpdate();
 
-            rightsRolesRepository.addRolesToUser(user, user.getRoles());
+                ResultSet rs = insertUserStatement.getGeneratedKeys();
+                rs.next();
+                long userId = rs.getLong(1);
+                user.setId(userId);
 
-            return true;
+                rightsRolesRepository.addRolesToUser(user, user.getRoles());
+
+                result.setResult(Boolean.TRUE);
+            }
+            else {
+                result.setResult(Boolean.FALSE);
+                result.addError("Already exists a user with this username.");
+            }
         } catch (SQLException e) {
             e.printStackTrace();
-            return false;
+            result.setResult(Boolean.FALSE);
         }
+
+        return result;
 
     }
 
     @Override
     public boolean delete(User user) {
-        String sql = "DELETE FROM `" + USER + "` WHERE id=\'" + user.getId() +"\' AND username=\'" + user.getUsername()+"\';";
+        String sql = "DELETE FROM `" + USER + "` WHERE username=\'" + user.getUsername()+"\';";
 
         try{
             Statement statement = connection.createStatement();

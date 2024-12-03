@@ -16,11 +16,11 @@ import static database.Constants.Roles.CUSTOMER;
 
 public class UserMapper {
     public static UserDTO convertUsertoUserDTO(User user){
-        return new UserDTOBuilder().setId(user.getId()).setUsername(user.getUsername()).setRole(user.getFirstRole()).build();
+        return new UserDTOBuilder().setUsername(user.getUsername()).setRole(user.getFirstRole()).build();
     }
 
     public static User convertUserDTOToUser(UserDTO userDTO){
-        return new UserBuilder().setId(userDTO.getId()).setUsername(userDTO.getUsername())
+        return new UserBuilder().setUsername(userDTO.getUsername())
                 .setRoles(null).build();
     }
 

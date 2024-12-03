@@ -1,12 +1,13 @@
 package service.user;
 
 import model.User;
+import model.validator.Notification;
 
 import java.util.List;
 
 public interface UserService {
     List<User> findAll();
-    boolean save(User user);
+    Notification<Boolean> save(User user);
     boolean delete(User user);
 
 }

@@ -20,6 +20,7 @@ import java.util.EventListener;
 import java.util.List;
 
 import static database.Constants.Roles.ADMINISTRATOR;
+import static database.Constants.Roles.EMPLOYEE;
 
 public class LoginController {
 
@@ -52,7 +53,7 @@ public class LoginController {
                 if (user.getFirstRole().getRole().equals(ADMINISTRATOR)){
                     AdminComponentFactory instance = AdminComponentFactory.getInstance(LoginComponentFactory.getComponentsForTests(), LoginComponentFactory.getStage(), loginNotification.getResult().getId());
                 }
-                else {
+                else if (user.getFirstRole().getRole().equals(EMPLOYEE)){
                     EmployeeComponentFactory instance = EmployeeComponentFactory.getInstance(LoginComponentFactory.getComponentsForTests(), LoginComponentFactory.getStage(), loginNotification.getResult().getId()); //trimitem catre controller id-ul userului; avem nevoie de el pentru functionalitatea de sale (userId din order)
                 }
             }

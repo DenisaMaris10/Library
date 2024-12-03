@@ -68,4 +68,21 @@ public class Constants {
         public static final String[] RIGHTS = new String[]{CREATE_USER, DELETE_USER, UPDATE_USER, CREATE_BOOK,
                 DELETE_BOOK, UPDATE_BOOK, SELL_BOOK, BUY_BOOK, RETURN_BOOK};
     }
+
+    public static class Months{
+        public static final String JANUARY = "January";
+        public static final String FEBRUARY = "February";
+        public static final String MARCH = "March";
+        public static final String APRIL = "April";
+        public static final String MAY = "May";
+        public static final String JUNE = "June";
+        public static final String JULY = "July";
+        public static final String AUGUST = "August";
+        public static final String SEPTEMBER = "September";
+        public static final String OCTOBER = "October";
+        public static final String NOVEMBER = "November";
+        public static final String DECEMBER = "December";
+        public static final String[] MONTHS = new String[]{JANUARY, FEBRUARY, MARCH, APRIL, MAY, JUNE, JULY, AUGUST, SEPTEMBER,
+                                                OCTOBER, NOVEMBER, DECEMBER};
+    }
 }

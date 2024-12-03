@@ -10,11 +10,6 @@ public class UserDTOBuilder {
         userDTO = new UserDTO();
     }
 
-    public UserDTOBuilder setId(Long id){
-        userDTO.setId(id);
-        return this;
-    }
-
     public UserDTOBuilder setUsername(String username){
         userDTO.setUsername(username);
         return this;
