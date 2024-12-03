@@ -54,7 +54,13 @@ public class AuthenticationServiceImpl implements AuthenticationService {
             userRegisterNotification.setResult(Boolean.FALSE);
         } else {
             user.setPassword(hashPassword(password));
-            userRegisterNotification.setResult(userRepository.save(user));
+            Notification<Boolean> saveResult = userRepository.save(user);
+            if(saveResult.hasErrors()) {
+                userRegisterNotification.addError(saveResult.getFirstError());
+                userRegisterNotification.setResult(Boolean.FALSE);
+            }
+            else
+                userRegisterNotification.setResult(Boolean.TRUE);
         }
 
         return userRegisterNotification;

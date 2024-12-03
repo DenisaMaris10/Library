@@ -82,5 +82,7 @@ public class Constants {
         public static final String OCTOBER = "October";
         public static final String NOVEMBER = "November";
         public static final String DECEMBER = "December";
+        public static final String[] MONTHS = new String[]{JANUARY, FEBRUARY, MARCH, APRIL, MAY, JUNE, JULY, AUGUST, SEPTEMBER,
+                                                OCTOBER, NOVEMBER, DECEMBER};
     }
 }

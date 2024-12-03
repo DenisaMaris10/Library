@@ -6,4 +6,5 @@ import java.util.List;
 
 public interface ReportGenerationRepository {
     List<UserReport> findAllOrderedByUserIdInAMonth(String month);
+    List<UserReport> findAllOrdersWithSum(String month);
 }

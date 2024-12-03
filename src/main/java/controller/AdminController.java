@@ -34,6 +34,7 @@ public class AdminController {
         this.adminView.addDeleteButtonListener(new DeleteButtonListener());
         this.adminView.addReportButtonListener(new ReportButtonListener());
         this.adminView.addRolesComboBoxListener(new RolesComboBoxListener());
+        this.adminView.addMonthsComboBoxListener(new MonthsComboBoxListener());
     }
 
     private class AddButtonListener implements EventHandler<ActionEvent>{
@@ -89,7 +90,7 @@ public class AdminController {
 
         @Override
         public void handle(ActionEvent actionEvent) {
-            reportGenerationService.generateReport();
+            reportGenerationService.generateReport(adminView.getMonth());
         }
     }
 
@@ -100,6 +101,14 @@ public class AdminController {
             String selectedRole = adminView.getSelectedRole();
             Role role = rightsRolesService.findRoleByTitle(selectedRole);
             adminView.setRole(role);
+        }
+    }
+
+    private class MonthsComboBoxListener implements EventHandler<ActionEvent>{
+
+        @Override
+        public void handle(ActionEvent actionEvent) {
+            adminView.setMonth();
         }
     }
 }

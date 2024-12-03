@@ -2,6 +2,7 @@ package service.user;
 
 
 import model.User;
+import model.validator.Notification;
 import repository.user.UserRepository;
 import repository.user.UserRepositoryMySQL;
 
@@ -20,7 +21,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public boolean save(User user) {
+    public Notification<Boolean> save(User user) {
         return userRepository.save(user);
     }
 

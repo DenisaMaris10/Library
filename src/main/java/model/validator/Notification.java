@@ -31,6 +31,10 @@ public class Notification<T> {
         return result;
     }
 
+    public String getFirstError(){
+        return this.errors.getFirst();
+    }
+
     public String getFormattedErrors(){
         return String.join("\n", this.errors);
     }

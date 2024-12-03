@@ -50,7 +50,7 @@ public class AdminComponentFactory {
         this.userService = new UserServiceImpl(userRepository);
         this.authenticationService = new AuthenticationServiceImpl(userRepository, rightsRolesRepository);
         this.reportGenerationRepository = new ReportGenerationRepositoryMySQL(connection);
-        this.reportGenerationService = new EmployeesReportService(reportGenerationRepository);
+        this.reportGenerationService = new EmployeesSumReportService(reportGenerationRepository);
         List<UserDTO> usersDTOs = UserMapper.convertUserListToUserDTOList(userService.findAll());
         this.adminView = new AdminView(primaryStage, usersDTOs);
         this.adminController = new AdminController(adminView, userService, rightsRolesService, authenticationService, reportGenerationService, userId);

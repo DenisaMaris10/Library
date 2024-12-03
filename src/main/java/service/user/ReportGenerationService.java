@@ -2,5 +2,5 @@ package service.user;
 
 public interface ReportGenerationService {
 
-    void generateReport();
+    void generateReport(String month);
 }

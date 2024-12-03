@@ -1,5 +1,6 @@
 package view;
 
+import database.Constants;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -18,11 +19,13 @@ import view.model.UserDTO;
 
 import java.util.List;
 
+import static database.Constants.Months.MONTHS;
+
 public class AdminView {
     private TableView userTableView;
     private final ObservableList<UserDTO> usersObservableList;
     private TextField usernameTextField;
-    private TextField passwordTextField; // sau PasswordField
+    private PasswordField passwordTextField; // sau PasswordField
     private Label usernameLabel;
     private Label passwordLabel;
     private Text actionTarget;
@@ -31,8 +34,10 @@ public class AdminView {
     private Button reportButton;
     private Button logOutButton;
     ComboBox<String> rolesComboBox;
+    ComboBox<String> monthsComboBox;
     private Stage primaryStage;
     private Role role;
+    private String month;
 
     public AdminView(Stage primaryStage, List<UserDTO> users){
         primaryStage.setTitle("Employee");
@@ -48,6 +53,7 @@ public class AdminView {
         initAddUserOptions(gridPane);
         initReportAndLogout(gridPane);
         initRoleMenu(gridPane);
+        initMonthMenu(gridPane);
         initActionTarget(gridPane);
         this.primaryStage = primaryStage;
         primaryStage.show();
@@ -63,8 +69,6 @@ public class AdminView {
     private void initTableView(GridPane gridPane){
         userTableView = new TableView<UserDTO>();
         userTableView.setPlaceholder(new Label("No users to be displayed"));
-        TableColumn<UserDTO, Long> idColumn = new TableColumn<>("UserId");
-        idColumn.setCellValueFactory(new PropertyValueFactory<>("id"));
 
         TableColumn<UserDTO, String> usernameColumn = new TableColumn<>("Username");
         usernameColumn.setCellValueFactory(new PropertyValueFactory<>("username"));
@@ -72,7 +76,7 @@ public class AdminView {
         TableColumn<UserDTO, String> roleColumn = new TableColumn<>("Role");
         roleColumn.setCellValueFactory(new PropertyValueFactory<>("role"));
 
-        userTableView.getColumns().addAll(idColumn, usernameColumn, roleColumn);
+        userTableView.getColumns().addAll(usernameColumn, roleColumn);
         userTableView.setItems(usersObservableList);
         gridPane.add(userTableView, 0, 0, 5, 1);
     }
@@ -86,7 +90,7 @@ public class AdminView {
 
         passwordLabel = new Label("Password:");
         gridPane.add(passwordLabel, 1, 2);
-        passwordTextField = new TextField();
+        passwordTextField = new PasswordField();
         passwordTextField.setPromptText("password");
         gridPane.add(passwordTextField, 2, 2);
 
@@ -106,10 +110,16 @@ public class AdminView {
     }
 
     private void initRoleMenu(GridPane gridPane){
-        String[] roles = {"ADMINISTRATOR", "EMPLOYEE", "CUSTOMER"};
+        String[] roles = {"ADMINISTRATOR", "EMPLOYEE"};
         rolesComboBox = new ComboBox<String>(FXCollections.observableArrayList(roles));
         rolesComboBox.getSelectionModel().selectFirst();
         gridPane.add(rolesComboBox, 7, 0);
+    }
+
+    private void initMonthMenu(GridPane gridPane){
+        monthsComboBox = new ComboBox<String>(FXCollections.observableArrayList(MONTHS));
+        monthsComboBox.getSelectionModel().selectFirst();
+        gridPane.add(monthsComboBox, 7, 2);
     }
 
     private void initActionTarget(GridPane gridPane){
@@ -132,6 +142,10 @@ public class AdminView {
 
     public void addRolesComboBoxListener(EventHandler<ActionEvent> rolesComboBoxActionListener){
         rolesComboBox.setOnAction(rolesComboBoxActionListener);
+    }
+
+    public void addMonthsComboBoxListener(EventHandler<ActionEvent> monthsComboBoxActionListener){
+        monthsComboBox.setOnAction(monthsComboBoxActionListener);
     }
 
     public void addDisplayAlertMessage(String title, String header, String content){
@@ -172,6 +186,9 @@ public class AdminView {
     public String getSelectedRole(){
         return rolesComboBox.getValue();
     }
+    public String getSelectedMonth(){
+        return monthsComboBox.getValue();
+    }
 
     public Stage getStage(){
         return primaryStage;
@@ -179,6 +196,13 @@ public class AdminView {
 
     public void setRole(Role role){
         this.role = role;
+    }
+    public void setMonth(){
+        month = monthsComboBox.getValue();
+    }
+
+    public String getMonth(){
+        return month;
     }
 
 }

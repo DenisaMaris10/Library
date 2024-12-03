@@ -4,21 +4,6 @@ import javafx.beans.property.*;
 
 public class UserDTO {
 
-    private LongProperty id;
-    public void setId(Long id){
-        idProperty().set(id);
-    }
-
-    public Long getId(){
-        return idProperty().get();
-    }
-    public LongProperty idProperty(){
-        if(id == null){
-            id = new SimpleLongProperty(this, "id");
-        }
-        return id;
-    }
-
     private StringProperty username;
     public void setUsername(String username){
         usernameProperty().set(username);

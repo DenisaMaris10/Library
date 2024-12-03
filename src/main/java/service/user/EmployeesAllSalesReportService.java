@@ -8,25 +8,21 @@ import model.UserReport;
 import repository.report.ReportGenerationRepository;
 
 import java.io.FileOutputStream;
-import java.io.IOException;
-import java.net.URISyntaxException;
 import java.util.List;
 import java.util.stream.Stream;
 
-import static database.Constants.Months.NOVEMBER;
-
-public class EmployeesReportService implements ReportGenerationService {
+public class EmployeesAllSalesReportService implements ReportGenerationService {
 
     private final ReportGenerationRepository reportGenerationRepository;
 
-    public EmployeesReportService(ReportGenerationRepository reportGenerationRepository){
+    public EmployeesAllSalesReportService(ReportGenerationRepository reportGenerationRepository){
         this.reportGenerationRepository = reportGenerationRepository;
     }
 
     @Override
-    public void generateReport() {
+    public void generateReport(String month) {
 
-        List<UserReport> userReportList = reportGenerationRepository.findAllOrderedByUserIdInAMonth(NOVEMBER);
+        List<UserReport> userReportList = reportGenerationRepository.findAllOrderedByUserIdInAMonth(month);
 
         try {
             Document document = new Document();
@@ -37,7 +33,6 @@ public class EmployeesReportService implements ReportGenerationService {
             PdfPTable table = new PdfPTable(4);
             addTableHeader(table);
             addRows(table, userReportList);
-            //addCustomRows(table);
 
             document.add(table);
             document.close();
@@ -82,15 +77,4 @@ public class EmployeesReportService implements ReportGenerationService {
         table.addCell(timestampCell);
     }
 
-    private static void addCustomRows(PdfPTable table)
-            throws URISyntaxException, BadElementException, IOException {
-
-        PdfPCell horizontalAlignCell = new PdfPCell(new Phrase("row 2, col 2"));
-        horizontalAlignCell.setHorizontalAlignment(Element.ALIGN_CENTER);
-        table.addCell(horizontalAlignCell);
-
-        PdfPCell verticalAlignCell = new PdfPCell(new Phrase("row 2, col 3"));
-        verticalAlignCell.setVerticalAlignment(Element.ALIGN_BOTTOM);
-        table.addCell(verticalAlignCell);
-    }
 }
