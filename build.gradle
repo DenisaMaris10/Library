@@ -30,7 +30,7 @@ mainClassName = 'launcher.Launcher'
 
 jar{
     manifest {
-        attributes 'Main-Class' : 'launcher.Main'
+        attributes 'Main-Class' : 'launcher.Launcher'
     }
 }
 

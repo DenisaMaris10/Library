@@ -5,10 +5,9 @@ import javafx.event.EventHandler;
 import mapper.UserMapper;
 import model.Role;
 import model.validator.Notification;
-import repository.security.RightsRolesRepository;
 import service.rights_roles.RightsRolesService;
 import service.user.AuthenticationService;
-import service.user.ReportGenerationService;
+import service.report.ReportGenerationService;
 import service.user.UserService;
 import view.AdminView;
 import view.model.UserDTO;
@@ -17,7 +16,7 @@ import view.model.builder.UserDTOBuilder;
 public class AdminController {
     private final AdminView adminView;
     private final UserService userService;
-    private final RightsRolesService rightsRolesService;  /** aici trebuie sa modific sa fac un service cred**/
+    private final RightsRolesService rightsRolesService;
     private final AuthenticationService authenticationService;
     private final ReportGenerationService reportGenerationService;
     private Long userId;
@@ -111,4 +110,5 @@ public class AdminController {
             adminView.setMonth();
         }
     }
+
 }

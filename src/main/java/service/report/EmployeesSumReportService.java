@@ -1,4 +1,4 @@
-package service.user;
+package service.report;
 
 import com.itextpdf.text.BaseColor;
 import com.itextpdf.text.Document;

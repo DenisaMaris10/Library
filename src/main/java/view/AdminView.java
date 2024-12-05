@@ -32,7 +32,6 @@ public class AdminView {
     private Button addButton;
     private Button deleteButton;
     private Button reportButton;
-    private Button logOutButton;
     ComboBox<String> rolesComboBox;
     ComboBox<String> monthsComboBox;
     private Stage primaryStage;
@@ -40,12 +39,12 @@ public class AdminView {
     private String month;
 
     public AdminView(Stage primaryStage, List<UserDTO> users){
-        primaryStage.setTitle("Employee");
+        primaryStage.setTitle("Admin");
 
         GridPane gridPane = new GridPane();
         initializeGridPane(gridPane);
 
-        Scene scene = new Scene(gridPane, 800, 800);
+        Scene scene = new Scene(gridPane, 700, 700);
         primaryStage.setScene(scene);
 
         usersObservableList = FXCollections.observableArrayList(users);
@@ -104,9 +103,6 @@ public class AdminView {
     private void initReportAndLogout(GridPane gridPane){
         reportButton = new Button("PDF Report");
         gridPane.add(reportButton, 7, 1);
-
-        logOutButton = new Button("LogOut");
-        gridPane.add(logOutButton, 2, 3);
     }
 
     private void initRoleMenu(GridPane gridPane){
@@ -197,6 +193,7 @@ public class AdminView {
     public void setRole(Role role){
         this.role = role;
     }
+
     public void setMonth(){
         month = monthsComboBox.getValue();
     }
@@ -204,5 +201,7 @@ public class AdminView {
     public String getMonth(){
         return month;
     }
+
+
 
 }

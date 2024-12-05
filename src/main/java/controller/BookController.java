@@ -112,29 +112,7 @@ public class BookController {
                 if (bookDTO != null) {
                     Book book = getBook(bookDTO);
                     if(checkStock(quantityInt, book)) {
-                        Order order = new OrderBuilder().setBookTitle(book.getTitle())
-                                .setBookAuthor(book.getAuthor())
-                                .setQuantity(quantityInt)
-                                .setUserId(userId)
-                                .setTotalPrice(book.getPrice() * quantityInt)
-                                .setTimestamp(LocalDate.now())
-                                .build();
-
-                        boolean savedOrder = orderService.save(order);
-                        if (savedOrder) {
-                            bookView.addDisplayAlertMessage("Order Successful", "Book ordered", "Book was successfully ordered");
-                            book.setStock(book.getStock()-quantityInt);
-
-                            if(bookService.update(book)){
-                                bookView.removeBookFromObservableList(bookDTO);
-                                bookView.addBookObservableList(BookMapper.convertBooktoBookDTO(book));
-                            }
-                            else {
-                                bookView.addDisplayAlertMessage("Order Error", "Problem at ordering book", "There was a problem with the updating book table.");
-                            }
-                        } else {
-                            bookView.addDisplayAlertMessage("Order Error", "Problem at ordering book", "There was a problem with the order. Please try again");
-                        }
+                        addOrder(book, quantityInt, bookDTO);
                     }else{
                         bookView.addDisplayAlertMessage("Order Error", "Problem at ordering book", "Please enter a smaller quantity.");
                     }
@@ -144,6 +122,32 @@ public class BookController {
 
             } catch(NumberFormatException e){
                 bookView.addDisplayAlertMessage("Order Error", "Problem at ordering book", "The quantity must be a number");
+            }
+        }
+
+        private void addOrder(Book book, Integer quantityInt, BookDTO bookDTO){
+            Order order = new OrderBuilder().setBookTitle(book.getTitle())
+                    .setBookAuthor(book.getAuthor())
+                    .setQuantity(quantityInt)
+                    .setUserId(userId)
+                    .setTotalPrice(book.getPrice() * quantityInt)
+                    .setTimestamp(LocalDate.now())
+                    .build();
+
+            boolean savedOrder = orderService.save(order);
+            if (savedOrder) {
+                bookView.addDisplayAlertMessage("Order Successful", "Book ordered", "Book was successfully ordered");
+                book.setStock(book.getStock()-quantityInt);
+
+                if(bookService.update(book)){
+                    bookView.removeBookFromObservableList(bookDTO);
+                    bookView.addBookObservableList(BookMapper.convertBooktoBookDTO(book));
+                }
+                else {
+                    bookView.addDisplayAlertMessage("Order Error", "Problem at ordering book", "There was a problem with the updating book table.");
+                }
+            } else {
+                bookView.addDisplayAlertMessage("Order Error", "Problem at ordering book", "There was a problem with the order. Please try again");
             }
         }
 

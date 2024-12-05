@@ -2,8 +2,6 @@ package service.user;
 import model.Role;
 import model.User;
 import model.builder.UserBuilder;
-//import model.validator.Notification;
-//import model.validator.UserValidator;
 import model.validator.Notification;
 import model.validator.UserValidator;
 import repository.security.RightsRolesRepository;
