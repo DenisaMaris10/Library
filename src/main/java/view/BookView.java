@@ -11,16 +11,13 @@ import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
 import javafx.event.EventHandler;
 import javafx.event.ActionEvent;
-import org.w3c.dom.Text;
 import view.model.BookDTO;
 
 import java.util.List;
 
 public class BookView {
     private TableView bookTableView;
-    //private TableView orderTableView;
     private final ObservableList<BookDTO> booksObservableList;
-    //private final ObservableList<Order> ordersObservableList;
     private TextField authorTextField;
     private TextField titleTextField;
     private TextField bookPriceTextField;

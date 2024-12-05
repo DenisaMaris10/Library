@@ -10,6 +10,8 @@ import repository.security.RightsRolesRepository;
 import repository.security.RightsRolesRepositoryMySQL;
 import repository.user.UserRepository;
 import repository.user.UserRepositoryMySQL;
+import service.report.EmployeesSumReportService;
+import service.report.ReportGenerationService;
 import service.rights_roles.RightsRolesService;
 import service.rights_roles.RightsRolesServiceImpl;
 import service.user.*;
@@ -29,21 +31,25 @@ public class AdminComponentFactory {
     private final AuthenticationService authenticationService;
     private final ReportGenerationRepository reportGenerationRepository;
     private final ReportGenerationService reportGenerationService;
+    private static Boolean componentsForTests;
+    private static Stage stage;
     private static volatile AdminComponentFactory instance;
 
-    public static AdminComponentFactory getInstance(Boolean componentsForTest, Stage primaryStage, Long userId){
+    public static AdminComponentFactory getInstance(Boolean aComponentsForTest, Stage primaryStage, Long userId){
         if(instance == null){
             synchronized (EmployeeComponentFactory.class) {
                 if(instance == null) {
-                    instance = new AdminComponentFactory(componentsForTest, primaryStage, userId);
+                    componentsForTests = aComponentsForTest;
+                    stage = primaryStage;
+                    instance = new AdminComponentFactory(aComponentsForTest, primaryStage, userId);
                 }
             }
         }
         return instance;
     }
 
-    private AdminComponentFactory(Boolean componentsForTest, Stage primaryStage, Long userId){
-        Connection connection = DatabaseConnectionFactory.getConnectionWrapper(componentsForTest).getConnection();
+    private AdminComponentFactory(Boolean aComponentsForTest, Stage primaryStage, Long userId){
+        Connection connection = DatabaseConnectionFactory.getConnectionWrapper(aComponentsForTest).getConnection();
         this.rightsRolesRepository = new RightsRolesRepositoryMySQL(connection);
         this.rightsRolesService = new RightsRolesServiceImpl(rightsRolesRepository);
         this.userRepository = new UserRepositoryMySQL(connection, rightsRolesRepository);
@@ -54,6 +60,7 @@ public class AdminComponentFactory {
         List<UserDTO> usersDTOs = UserMapper.convertUserListToUserDTOList(userService.findAll());
         this.adminView = new AdminView(primaryStage, usersDTOs);
         this.adminController = new AdminController(adminView, userService, rightsRolesService, authenticationService, reportGenerationService, userId);
+        componentsForTests = aComponentsForTest;
     }
 
     public AdminView getAdminView() {
@@ -71,5 +78,11 @@ public class AdminComponentFactory {
     public UserService getBookService() {
         return userService;
     }
+    public static Boolean getComponentsForTests(){
+        return componentsForTests;
+    }
 
+    public static Stage getStage() {
+        return stage;
+    }
 }
