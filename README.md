@@ -1,4 +1,4 @@
-#Library
+# Library
 ## Description
 This project represents a desktop application which simulates the activity of a library (bookstore). It 
 ## Features 
